@@ -13,9 +13,8 @@ import com.example.composition.domain.entity.Level
 import com.example.composition.domain.entity.Question
 import com.example.composition.domain.usecases.GenerateQuestionUseCase
 import com.example.composition.domain.usecases.GetGameSettingsUseCase
-import kotlin.math.min
 
-class GameVIewModel(application: Application) : AndroidViewModel(application) {
+class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val context = application
 
@@ -70,6 +69,7 @@ class GameVIewModel(application: Application) : AndroidViewModel(application) {
         getGameSettings(level)
         startTimer()
         generateQuestion()
+        updateProgress()
     }
 
     fun chooseAnswer(number: Int) {
@@ -88,12 +88,12 @@ class GameVIewModel(application: Application) : AndroidViewModel(application) {
         )
 
         _enoughCountOfRightAnswers.value = countOfRightAnswers >= gameSettings.minCountOfRightAnswers
-        _enoughPercentOfRightAnswers.value = percent >= gameSettings.minPersentOfRightAnswers
+        _enoughPercentOfRightAnswers.value = percent >= gameSettings.minPercentOfRightAnswers
     }
 
     private fun calculatePercentOfRightAnswers(): Int {
+        if(countOfQuestions == 0) return 0
         return (1.0 * countOfRightAnswers / countOfQuestions).toInt()
-
     }
 
     private fun checkAnswer(number: Int) {
@@ -107,7 +107,7 @@ class GameVIewModel(application: Application) : AndroidViewModel(application) {
     private fun getGameSettings(level: Level) {
         this.level = level
         this.gameSettings = getGameSettingsUseCase(level)
-        _minPercent.value = gameSettings.minPersentOfRightAnswers
+        _minPercent.value = gameSettings.minPercentOfRightAnswers
     }
 
     private fun startTimer() {
