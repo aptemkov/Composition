@@ -93,7 +93,7 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun calculatePercentOfRightAnswers(): Int {
         if(countOfQuestions == 0) return 0
-        return (1.0 * countOfRightAnswers / countOfQuestions).toInt()
+        return (countOfRightAnswers / countOfQuestions.toDouble() * 100).toInt()
     }
 
     private fun checkAnswer(number: Int) {
